@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=40.8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "submission-checker"
+version = "0.1.0"
+description = "Tool to check academic conference submissions for policy compliance."
+authors = [
+    {name = "Your Name", email = "you@example.com"}
+]
+
+[project.scripts]
+submission-checker = "submission_checker.checker:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
