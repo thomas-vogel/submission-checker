@@ -6,14 +6,14 @@ import sys
 sys.path.append(str(Path(__file__).resolve().parents[2] / "src"))
 
 from submission_checker import checker
-from PyPDF2 import PdfWriter
+from pypdf import PdfWriter
 
 
 def make_pdf(pages_text, path):
     writer = PdfWriter()
     for txt in pages_text:
         writer.add_blank_page(width=72, height=72)
-        # PyPDF2 currently doesn't allow adding text easily; we'll ignore actual text content and monkeypatch extraction
+        # pypdf currently doesn't allow adding text easily; we'll ignore actual text content and monkeypatch extraction
     with open(path, "wb") as f:
         writer.write(f)
 

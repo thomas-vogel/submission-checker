@@ -68,7 +68,7 @@ The tool performs the following checks on each PDF. All checks require successfu
 ```bash
 cd submission-checker
 pip install -e .
-pip install PyPDF2
+pip install pypdf
 ```
 
 Or use `requirements.txt`:

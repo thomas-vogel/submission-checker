@@ -5,7 +5,7 @@ import csv
 from pathlib import Path
 from typing import List, Tuple, Optional
 
-import PyPDF2
+from pypdf import PdfReader
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 SUSPICIOUS_PHRASES = [r"our previous paper", r"in our previous work"]
@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeou
 
 def extract_text_per_page(pdf_path: Path) -> List[str]:
     try:
-        reader = PyPDF2.PdfReader(str(pdf_path))
+        reader = PdfReader(str(pdf_path))
         texts = []
         for page in reader.pages:
             try:
@@ -53,7 +53,7 @@ def extract_text_with_timeout(pdf_path: Path, timeout: int = 10) -> List[str]:
 
 def get_metadata(pdf_path: Path) -> dict:
     try:
-        reader = PyPDF2.PdfReader(str(pdf_path))
+        reader = PdfReader(str(pdf_path))
         return reader.metadata or {}
     except Exception:
         return {}
