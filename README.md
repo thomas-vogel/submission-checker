@@ -197,12 +197,20 @@ submission-checker --file paper.pdf --max-pages 10
 ```
 
 # Single file, ACM style required
+
+```bash
 submission-checker --file paper.pdf --max-pages 8 --style acm
+```
 
 # Batch check IEEE submissions
+
+```bash
 submission-checker --folder submissions --max-pages 12 --style ieee
+```
 
 # Check folder without page limit
+
+```bash
 submission-checker --folder papers
 ```
 
