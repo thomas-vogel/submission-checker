@@ -96,3 +96,22 @@ def test_numeric_reference_format(tmp_path, monkeypatch):
     assert not any("author citations" in w.lower() or "numeric" in w.lower() for w in warns), f"Unexpected citation warning for numeric refs: {warns}"
 
 
+def test_our_previous_work_detection(tmp_path, monkeypatch):
+    """Test detection of 'Our previous work' phrase in Conclusion section."""
+    pdf_path = tmp_path / "self_citation.pdf"
+    texts = [
+        "Title and Introduction",
+        "Related Work and Methods",
+        "Evaluation Results Here",
+        "Conclusion: Our previous work demonstrated a reference architecture to present an overview of agent design [27], while this work extends it.",
+        "REFERENCES",
+        "[27] Smith, J., et al. 2023. A Reference Architecture...",
+    ]
+    make_pdf(texts, pdf_path)
+    monkeypatch.setattr(checker, "extract_text_with_timeout", lambda p, timeout=10: texts)
+    
+    # Check - should detect suspicious phrase "our previous work"
+    warns = checker.check_file(str(pdf_path))
+    assert any("Suspicious wording" in w and "our previous work" in w.lower() for w in warns), f"Expected 'our previous work' detection, got: {warns}"
+
+

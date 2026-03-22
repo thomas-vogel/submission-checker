@@ -10,7 +10,7 @@ from pypdf import PdfReader
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 # Generic institutional emails that should not be flagged as anonymity issues
 ALLOWED_EMAILS = {"authors@instituitons.edu", "email@email.email"}
-SUSPICIOUS_PHRASES = [r"our previous paper", r"in our previous work"]
+SUSPICIOUS_PHRASES = [r"our previous work", r"our previous paper", r"in our previous work"]
 REFERENCES_HEADER = re.compile(r"^references?\s*:?\s*$", flags=re.IGNORECASE)
 STYLE_KEYWORDS = {
     "acm": [r"acm", r"association for computing machinery"],
