@@ -9,7 +9,7 @@ from pypdf import PdfReader
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 # Generic institutional emails that should not be flagged as anonymity issues
-ALLOWED_EMAILS = {"authors@instituitons.edu", "email@email.email"}
+ALLOWED_EMAILS = {"authors@instituitons.edu", "email@email.email", "permissions@acm.org"}
 SUSPICIOUS_PHRASES = [r"our previous work", r"our previous paper", r"in our previous work"]
 REFERENCES_HEADER = re.compile(r"^references?\s*:?\s*$", flags=re.IGNORECASE)
 STYLE_KEYWORDS = {
@@ -423,14 +423,16 @@ def check_folder(
     if not pdf_files:
         return {"passed": 0, "failed": 0, "results": [], "message": "No PDF files found in folder or subfolders."}
     
+    count = 0
     for pdf_file in pdf_files:
+        count += 1
         # Get relative path for display
         try:
             rel_path = pdf_file.relative_to(folder)
         except ValueError:
             rel_path = pdf_file
         
-        print(f"Checking file: {rel_path}")
+        print(f"Checking file {count}/{len(pdf_files)}: {rel_path}")
         
         try:
             warnings = check_file(
@@ -457,9 +459,19 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Check academic submission PDFs for policy issues.")
-    parser.add_argument("--file", help="Path to a single PDF file")
-    parser.add_argument("--folder", help="Path to folder containing PDFs to check")
-    parser.add_argument("--max-pages", type=int, help="Maximum total pages allowed (main text + references)")
+    parser.add_argument(
+        "--file", 
+        help="Path to a single PDF file"
+    )
+    parser.add_argument(
+        "--folder", 
+        help="Path to folder containing PDFs to check"
+    )
+    parser.add_argument(
+        "--max-pages", 
+        type=int, 
+        help="Maximum total pages allowed (main text + references)"
+    )
     parser.add_argument(
         "--main-pages",
         type=int,
@@ -491,6 +503,10 @@ def main():
         help="Path to HotCRP CSV file for bulk-updating paper tags in HotCRP. Paper ID is extracted from the filename (last number in filename), e.g., for paper ase26-paper123.pdf the paper id is 123.",
     )
     args = parser.parse_args()
+    
+    print("Submission Checker Configuration:")
+    for arg_name, arg_value in vars(args).items():
+        print(f"- {arg_name}: {arg_value}")
 
     # Check that at least one of --file or --folder is provided
     if not args.file and not args.folder:
